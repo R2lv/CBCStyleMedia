@@ -337,6 +337,7 @@ app.controller("SettingsController", function($scope) {
     $scope.mdl = {
         quality: "1"
     };
+    
 
 
     $scope.changeQuality = function($event) {
