@@ -1,0 +1,16 @@
+<div class="row" ng-repeat="item in news">
+    <div class="col s12 inContainer">
+        <div class="card" ng-click="open(item.id)">
+            <div class="card-image waves-effect waves-block waves-light">
+                <img ng-src="http://35.165.142.89{{item.image}}">
+                <span class="card-title">
+                    <a href="">{{item.title}}</a>
+                    <span  class="post-intro">
+                      {{item.post_intro}}
+                    </span>
+                  </span>
+                <div class="grad"></div>
+            </div>
+        </div>
+    </div>
+</div>

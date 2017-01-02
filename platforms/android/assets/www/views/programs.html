@@ -1,0 +1,37 @@
+<section>
+    <div class="streamControl white">
+        <div class="images">
+            <div class="dots dis-inline-block" style="width:13%;">
+                <a href="javascript:void(0)"><img src="images/dots.png" alt=""></a>
+            </div>
+            <div class="vol dis-inline-block" style="width:19%;" >
+                <a href="javascript:void(0)" class="vControl" ng-class="bodyController.streamVolumeState" ng-click="bodyController.switchVolume()"></a>
+            </div>
+            <div class="title dis-inline-block" style="font-size:12px; color:#3971a1;">
+                <span>{{currentProgram}}</span>
+            </div>
+            <div class="pause dis-inline-block" style="width:19%;">
+                <a href="javascript:void(0)" class="pControl" ng-click="bodyController.playPause()" ng-class="bodyController.streamState"></a>
+                <!--                <img  src="/images/pause.png">-->
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="content-header">
+            <div class="baner">
+                <img src="images/programs-bg.png">
+            </div>
+        </div>
+    </div>
+    <div class="post-container">
+
+        <div class="post" ng-click="open(item.id)" ng-repeat="item in programs">
+            <div class="post-img-container">
+                <img ng-src="http://35.165.142.89{{item.image}}" align="right">
+            </div>
+            <h4>{{item.title}}</h4>
+            <p>{{item.post_intro}}</p>
+
+        </div>
+    </div>
+</section>

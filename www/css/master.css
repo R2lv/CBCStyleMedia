@@ -1,0 +1,291 @@
+html, body {
+	margin: 0;
+	padding: 0;
+
+}
+
+
+header {
+    width: 100%;
+    background-color: #004b8c;
+    color: #ffffff;
+	line-height: 50px;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+}
+
+.headButton {
+	color: #ffffff !important;
+	display: inline-block;
+	line-height: 50px;
+	vertical-align: middle;
+	padding: 0 10px;
+}
+.headButton i {
+	display: inline-block;
+	line-height: 50px;
+	float: left;
+	vertical-align: middle;
+}
+.header-title {
+	font-size: 18px;
+	display: inline-block;
+	vertical-align: middle;
+}
+section {
+	margin-top: 50px;
+	padding-bottom: 50px;
+}
+  .pinned {
+    position: fixed !important;
+  }
+        
+
+#slide-out {
+	z-index: 11111;
+}
+#sidenav-overlay {
+	z-index: 1;
+}
+.card-image .little-description {
+    position: absolute;
+    color: white;
+    bottom: -52px;
+    left: 12px; 
+}
+.card-title {
+	color: #ffffff;
+}
+
+section .row {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.inContainer {
+    width: 100%;
+    margin: 0;
+    padding: 0 !important;
+
+}
+
+.card {
+	margin: 0;
+}
+.card-title {
+    color: #fff;
+    position: absolute;
+    bottom: 23px;
+    left: 0;
+    padding: 0 20px;
+	box-sizing: border-box;
+	width: 100%;
+}
+.card-title a {
+	color: #ffffff;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.card-title span {
+	display: block;
+    font-size: 14px;
+}
+.grad {
+	width: 100%;
+    height: 85px;
+	position: absolute;
+	bottom: 0;
+	z-index: -1;
+	background: linear-gradient(to top , #000,rgba(5,6,7,.0));
+}
+.radio-fixed {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 65px;
+	background-color: #f2f2f2;	
+	z-index: 1;
+	background: linear-gradient(to right, #565656, #626262);
+}
+
+
+
+.radio-fixed .left	{
+	display: inline-block;
+	width: 80%;
+	height: 100%;
+}
+
+.radio-fixed .left .imageContainer {
+	position: relative;
+	float: left;
+	margin: 7px 5px;
+	border: 1px solid white;
+	width: 50px;
+	height: 50px;
+}
+.radio-fixed .left .imageContainer .title {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 20px;
+	color: white;
+	background-color: rgba(0,0,0,.3);
+}
+.radio-fixed .left .text {
+	float: left;
+	width: calc(100% - 60px);
+	height: 55px;
+	margin: 5px 0;
+}
+.radio-fixed .left .text span {
+	color: #ffffff;
+	font-size: 15px;
+}
+.radio-fixed .left .text p {
+	color: #ffffff;
+	font-size: 12px;
+	margin: 3px 0;
+}
+.radio-fixed .rightPlace {
+	display: inline-block;
+	width: 20%; 
+	font-size: 15px;
+}
+.radio-fixed .rightPlace .stopres a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+.radio-fixed .rightPlace .stopres i {
+	color: #ffffff;
+    font-size: 68px;
+}
+.modalFill {
+	max-height: 100% !important;
+	height: 100%;
+	background: linear-gradient(to bottom right, #19202a, #373f4c);
+}
+
+.modalFill .header	{
+    width: 100%;
+    height: 57px;
+    margin: 5px 0;
+}
+.modalFill .header .left i {
+    padding: 0 10px;
+    float: left;
+}
+.modalFill .header .left i {
+
+    color: white;
+    font-size: 50px;
+
+}
+.modalFill .header .rightAlign {
+    float: left;
+    margin-left: 15px;
+    width: calc(100% - 90px);
+    height: 100%;
+}
+.modalFill .header .rightAlign 	.title {
+	color: #ffffff;
+}
+.modalFill span{
+	color: white;
+	font-size: 15px !important;
+}
+.modalFill p{
+	color: #ffffff;
+	font-size: 12px;
+	margin: 3px 0;
+}
+.modalFill .container {
+	margin: 20px 0;
+	height: 60%; 
+	width: 80%;
+	margin: 0 auto;
+
+}
+.modalFill .imageContainer {
+	width: 100%;
+	height: 85%;
+    overflow: hidden;
+
+}
+.modalFill .imageContainer img {
+
+}
+.modalFill .textContainer {
+	text-align: center;
+	margin: 12px 0;
+}
+.modalFill .timeDisplay	{
+	text-align: center;
+}
+.modalFill .timeDisplay	span {
+	text-align: center;
+	font-size: 20px !important;
+}
+.modalFill .stopres {
+    position: absolute;
+    bottom: 2px;
+	width: 100%;
+}
+.modalFill .stopres i {
+	font-size: 60px;
+	color: white;
+	width: 60px;
+}
+.modalFill .stopres a {
+	display: block; 
+    width: 60px; 
+    height: 60px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	color: transparent !important;
+}
+
+.post-intro {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.category-list {
+	padding: 0 2px !important;
+}
+
+.category-list .category {
+	background-size: cover;
+	padding: 0 !important;
+	margin: 2px !important;
+	width: calc(50% - 4px) !important;
+}
+.category-list .category .title {
+	display: block;
+	width: 100%;
+	float: left;
+	height: 120px;
+	line-height: 120px;
+	vertical-align: middle;
+	color: #FFF;
+	text-align: center;
+	text-transform: capitalize;
+	font-family: "Roboto", sans-serif;
+	font-size: 15px;
+	background: rgba(0,0,0,0.5);
+}
+
+.input-field label {
+	width: calc(100% - 1.5rem) !important;
+}

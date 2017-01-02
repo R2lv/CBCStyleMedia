@@ -1,0 +1,32 @@
+    <section class="content">
+        <div class="player-wrapper">
+            <div class="player">
+                <div class="loadingWrapper">
+                    <div class="loading" ng-show="bodyController.isAudioLoading">
+
+                    </div>
+                </div>
+                <div class="time">
+                    {{timeStr}}
+                </div>
+            </div>
+
+            <div class="social-icons">
+                <a href="#" class="social-icon fb"> </a>
+                <a href="#" class="social-icon insta"> </a>
+                <a href="#" class="social-icon heart"> </a>
+            </div>
+        </div>
+
+        <div class="live-pause-wrapper">
+            <div class="realtime-title">
+                {{currentProgram}}
+            </div>
+            <div class="live-pause-button">
+                <div class="live-pause" ng-click="bodyController.playPause()" ng-class="bodyController.streamState">
+
+                </div>
+            </div>
+        </div>
+
+    </section>
