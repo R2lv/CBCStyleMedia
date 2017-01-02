@@ -27,12 +27,6 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
         templateUrl: 'views/contact.html',
         bclass: "contact"
     })
-    .state('program', {
-        url: '/program/{id:int}',
-        controller: 'programController',
-        templateUrl: 'views/program.html',
-        bclass: "program"
-    })
     .state('news', {
         url: '/news/{id:int}',
         controller: 'newsController',
@@ -86,7 +80,7 @@ app.run(function($cordovaStatusbar) {
     }, false);
 });
 
-app.controller("mainController", function($scope, $stateParams, $http, $state, $api, $timeout) {
+app.controller("mainController", function($scope, $stateParams, $http, $state, $api) {
 
     $scope.$parent.isLoading = true;
 
@@ -125,7 +119,7 @@ app.controller("catsController", function ($scope, $api, $state) {
     }
 });
 
-app.controller('programsController', function ($scope,$state,$api, $timeout) {
+app.controller('programsController', function ($scope,$state,$api) {
 
     $scope.$parent.isLoading = true;
     $api.get('/programs/all', {
@@ -260,7 +254,7 @@ app.controller('BodyController', function($scope, $interval, $api) {
 
     $scope.isLoading = true;
 
-    $scope.$on('$stateChangeStart', function(event, toState/*, toParams, fromState, fromParams*/){
+    $scope.$on('$stateChangeStart', function(){
         $scope.isLoading = true;
     });
 
@@ -339,7 +333,7 @@ app.controller('BodyController', function($scope, $interval, $api) {
 
 });
 
-app.controller("SettingsController", function($scope, $timeout) {
+app.controller("SettingsController", function($scope) {
     $scope.mdl = {
         quality: "1"
     };
