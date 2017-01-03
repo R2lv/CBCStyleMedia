@@ -204,7 +204,7 @@ section .row {
 	margin: 3px 0;
 }
 .modalFill .container {
-	margin: 20px 0;
+	margin: 20px auto;
 	height: 60%; 
 	width: 80%;
 }
