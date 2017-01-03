@@ -56,7 +56,10 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
 
     $(function(){
 
-        $(".button-collapse").sideNav();
+        $(".button-collapse").sideNav({
+            closeOnClick: true,
+            menuWidth: 250
+        });
         // Initialize collapsible (uncomment the line below if you use the dropdown variation)
         $('.collapsible').collapsible();
 
@@ -67,10 +70,6 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
 
         // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
         $('.modal').modal();
-
-        $(".side-nav a").click(function() {
-            // $(".button-collapse").sideNav("hide");
-        });
 
     });
 
