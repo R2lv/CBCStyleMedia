@@ -207,8 +207,6 @@ section .row {
 	margin: 20px 0;
 	height: 60%; 
 	width: 80%;
-	margin: 0 auto;
-
 }
 .modalFill .imageContainer {
 	width: 100%;
@@ -288,4 +286,54 @@ section .row {
 
 .input-field label {
 	width: calc(100% - 1.5rem) !important;
+}
+
+.news-full h1.title {
+	padding: 0;
+	font-size: 18px;
+	font-weight: bold;
+	margin: 10px 0 0;
+}
+
+.news-full h2.category {
+	font-size: 16px;
+	padding: 0;
+	font-weight: bold;
+	margin: 10px 0 0;
+}
+
+.news-full h3.date {
+	font-size: 15px;
+	font-weight: bold;
+	padding: 0;
+	margin: 10px 0 0;
+}
+
+.news-full p.news-text {
+	font-size: 14px;
+}
+
+.news-full h1, .news-full h2, .news-full h3, .news-full p {
+	color: #333;
+}
+
+.news-full .img-container {
+	min-height: 100px;
+}
+
+.livevideo iframe {
+	width: 100%;
+	height: 300px;
+	background: #000;
+}
+
+.livevideo h1 {
+	font-size: 18px;
+}
+
+.livevideo .info-text {
+	color: #333;
+	font-weight: bold;
+	font-size: 12px;
+	padding: 0 15px !important;
 }

@@ -12,12 +12,12 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
     $stateProvider
     .state('main', {
         url: '/newses/:cat',
-        controller: 'mainController',
+        controller: 'MainController',
         templateUrl: 'views/news.html'
     })
     .state('categories', {
         url: '/categories',
-        controller: 'catsController',
+        controller: 'CatsController',
         templateUrl: 'views/categories.html',
         bclass: "categories"
     })
@@ -29,8 +29,14 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
     })
     .state('news', {
         url: '/news/{id:int}',
-        controller: 'newsController',
-        templateUrl: 'views/news.html',
+        controller: 'NewsController',
+        templateUrl: 'views/news-full.html',
+        bclass: 'news'
+    })
+    .state('livevideo', {
+        url: '/livevideo',
+        controller: 'VideoController',
+        templateUrl: 'views/livevideo.html',
         bclass: 'news'
     })
     .state('settings', {
@@ -72,7 +78,6 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
 
 app.run(function($cordovaStatusbar) {
     document.addEventListener("deviceready", function() {
-        console.log("Setting Style");
         $cordovaStatusbar.overlaysWebView(true);
         $cordovaStatusbar.style(2);
         $cordovaStatusbar.styleHex("#EBE13A");
@@ -80,11 +85,10 @@ app.run(function($cordovaStatusbar) {
     }, false);
 });
 
-app.controller("mainController", function($scope, $stateParams, $http, $state, $api) {
+app.controller("MainController", function($scope, $stateParams, $http, $state, $api) {
 
     $scope.$parent.isLoading = true;
 
-    console.log($stateParams);
     var url = parseInt($stateParams.cat) ? "/news/cat" : "/news/all";
 
     $api.get(url, {
@@ -95,19 +99,17 @@ app.controller("mainController", function($scope, $stateParams, $http, $state, $
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.news = data.result;
-            // fixHeight(document.querySelector(".post-container"));
         }
     });
 
 
     $scope.open = function(id) {
         $state.go("news",{id:id});
-        console.log(id);
     };
 
 });
 
-app.controller("catsController", function ($scope, $api, $state) {
+app.controller("CatsController", function ($scope, $api, $state) {
     $api.get("/news/categories", {}, function(data) {
         if(data.success) {
             $scope.categories = data.result;
@@ -129,7 +131,6 @@ app.controller('programsController', function ($scope,$state,$api) {
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.programs = data.result;
-            fixHeight(document.querySelector(".post-container"));
         }
     });
 
@@ -139,12 +140,7 @@ app.controller('programsController', function ($scope,$state,$api) {
 
 });
 
-app.controller('ContactController', function ($scope,$state,$api, $timeout) {
-    $scope.$on('$viewContentLoaded', function() {
-        $timeout(function() {
-            fixHeight(document.querySelector("form.contact-form"));
-        }, 300);
-    });
+app.controller('ContactController', function ($scope,$state,$api) {
 
     $scope.submit = function() {
        $api.get("/contact", {
@@ -179,18 +175,14 @@ app.controller('programController', function($scope, $stateParams, $timeout, $ap
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.program = data.result;
-            fixHeight(document.querySelector(".program-info"));
         }
     });
 
 });
 
-app.controller('newsController', function($scope, $stateParams, $timeout, $api) {
+app.controller('NewsController', function($scope, $stateParams, $timeout, $api) {
 
-    $scope.news = {
-        title: "...",
-        post_whole: "..."
-    };
+    $scope.news = {};
 
     $scope.$parent.isLoading = true;
     $api.get('/news', {
@@ -199,7 +191,6 @@ app.controller('newsController', function($scope, $stateParams, $timeout, $api) 
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.news = data.result;
-            fixHeight(document.querySelector(".program-info"));
         }
     });
 
@@ -275,7 +266,6 @@ app.controller('BodyController', function($scope, $interval, $api) {
     function setStreamSrc() {
         $scope.streamQuality = getQuality();
         $scope.streamSrc = "http://35.165.142.89:8000"+getQualityPath();
-        console.log($scope.streamSrc);
         if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
             $scope.$apply();
         }
@@ -292,6 +282,12 @@ app.controller('BodyController', function($scope, $interval, $api) {
         } else {
             audio.pause();
             self.streamState = "paused";
+        }
+    };
+
+    $scope.pause = function() {
+        if(!audio.paused) {
+            audio.pause();
         }
     };
 
@@ -333,12 +329,36 @@ app.controller('BodyController', function($scope, $interval, $api) {
 
 });
 
+app.controller("VideoController", function($scope) {
+    $scope.infoText = "Loading Video...";
+
+    $scope.videoSrc = "live_stream?channel=UC_3Yu0IUFzFI1wv5iqr-VjQ&enablejsapi=1&widgetid=1&origin=*#";
+
+    // Load the IFrame Player API code asynchronously.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/player_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // Replace the 'ytplayer' element with an <iframe> and
+    // YouTube player after the API code downloads.
+    var player;
+    window.onYouTubePlayerAPIReady = function() {
+        console.log("Asf");
+        player = new YT.Player('ytplayer', {
+            height: '360',
+            width: '640',
+            videoId: "live_stream?channel=UC_3Yu0IUFzFI1wv5iqr-VjQ&enablejsapi=1&widgetid=1&origin=*&showinfo=0&controls=0&autoplay=1#",
+            autoplay: 1
+        });
+    }
+
+});
+
 app.controller("SettingsController", function($scope) {
     $scope.mdl = {
         quality: "1"
     };
-    
-
 
     $scope.changeQuality = function($event) {
         $scope.$parent.saveQuality($event.target.checked ? "HQ" : "LQ");
@@ -346,9 +366,8 @@ app.controller("SettingsController", function($scope) {
 
 });
 
-function fixHeight(e) {
-    if(e) {
-        var c = e.getBoundingClientRect();
-        e.style.height = (document.body.clientHeight - c.top - 71) + "px";
-    }
-}
+app.filter('trustAsResourceUrl', ['$sce', function($sce) {
+    return function(val) {
+        return $sce.trustAsResourceUrl(val);
+    };
+}]);

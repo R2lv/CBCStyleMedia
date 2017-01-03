@@ -1,14 +1,17 @@
-<div class="row">
-    <div class="col s12">
-
-        <div class="switch center" style="padding-top: 20px;">
-            <label>
-                LQ Streaming
-                <input type="checkbox" ng-click="changeQuality($event)" ng-model="mdl.quality" ng-checked="$parent.streamQuality == 'HQ'" ng-value="1">
-                <span class="lever"> </span>
-                HQ Streaming
-            </label>
+<section class="livevideo">
+    <div class="row">
+        <div class="col s12">
+            <h1 class="center">Live Video Stream</h1>
         </div>
-
     </div>
-</div>
+    <div class="row">
+        <div class="col s12" id="ytplayer">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="info-text col s12 ng-cloak">
+            {{infoText}}
+        </div>
+    </div>
+</section>
