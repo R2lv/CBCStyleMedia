@@ -1,108 +1,126 @@
 var app = angular.module('App', ['ngCordova','ui.router']);
 var titles = {
-    main: "الرئيسية",
-    live: "البث المباشر",
+    main: "CBC Radio",
     programs: "خلكم وينا",
     program: "برامجنا",
     news: "آخر الأخبار",
-    contact: "برامجنا"
+    contact: "برامجنا",
+    categories: "Categories"
 };
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpParamSerializerProvider) {
 
     $stateProvider
     .state('main', {
-        url: '/',
-        controller: 'mainController',
-        templateUrl: 'views/index.html'
+        url: '/newses/:cat',
+        controller: 'MainController',
+        templateUrl: 'views/news.html'
     })
-    .state('live', {
-        url: '/live',
-        controller: 'liveController',
-        templateUrl: 'views/livestream.html',
-        bclass: "live"
-    })
-    .state('programs', {
-        url: '/programs',
-        controller: 'programsController',
-        templateUrl: 'views/programs.html',
-        bclass: "programs"
+    .state('categories', {
+        url: '/categories',
+        controller: 'CatsController',
+        templateUrl: 'views/categories.html',
+        bclass: "categories"
     })
     .state('contact', {
         url: '/contact',
-        controller: 'contactController',
+        controller: 'ContactController',
         templateUrl: 'views/contact.html',
         bclass: "contact"
     })
-    .state('program', {
-        url: '/program/{id:int}',
-        controller: 'programController',
-        templateUrl: 'views/program.html',
-        bclass: "program"
-    })
     .state('news', {
         url: '/news/{id:int}',
-        controller: 'newsController',
-        templateUrl: 'views/news.html',
+        controller: 'NewsController',
+        templateUrl: 'views/news-full.html',
         bclass: 'news'
+    })
+    .state('livevideo', {
+        url: '/livevideo',
+        controller: 'VideoController',
+        templateUrl: 'views/livevideo.html',
+        bclass: 'news'
+    })
+    .state('settings', {
+        url: '/settings',
+        controller: 'SettingsController',
+        templateUrl: 'views/settings.html',
+        bclass: 'settings'
     });
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/newses/0');
 
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
     $httpProvider.defaults.transformRequest = function(data) {
         return $httpParamSerializerProvider.$get()(data);
-    }
+    };
+
+
+    $(function(){
+
+        $(".button-collapse").sideNav();
+        // Initialize collapsible (uncomment the line below if you use the dropdown variation)
+        $('.collapsible').collapsible();
+
+        $(".play-pause").click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+
+        $(".side-nav a").click(function() {
+            // $(".button-collapse").sideNav("hide");
+        });
+
+    });
 
 });
 
 app.run(function($cordovaStatusbar) {
     document.addEventListener("deviceready", function() {
-        console.log("Setting Style");
         $cordovaStatusbar.overlaysWebView(true);
         $cordovaStatusbar.style(2);
-        $cordovaStatusbar.styleHex("#EBE13A");
-        // $cordovaStatusbar.styleHex("#FFFFFF");
+        $cordovaStatusbar.styleHex("#003462");
     }, false);
 });
 
-app.controller("mainController", function($scope, $http, $state, $api, $timeout) {
+app.controller("MainController", function($scope, $stateParams, $http, $state, $api) {
 
     $scope.$parent.isLoading = true;
-    $api.get('/news/all', {
+
+    var url = parseInt($stateParams.cat) ? "/news/cat" : "/news/all";
+
+    $api.get(url, {
         'page':1,
-        'length':10
+        'length':10,
+        'id': $stateParams.cat
     }, function(data) {
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.news = data.result;
-            fixHeight(document.querySelector(".post-container"));
         }
     });
 
 
     $scope.open = function(id) {
         $state.go("news",{id:id});
-        console.log(id);
     };
 
 });
-app.controller("liveController", function ($scope, $http, $state, $api, $interval) {
-    function showDate() {
-        var dt = new Date();
-        $scope.timeStr = dt.getHours()+":"+dt.getMinutes();
+
+app.controller("CatsController", function ($scope, $api, $state) {
+    $api.get("/news/categories", {}, function(data) {
+        if(data.success) {
+            $scope.categories = data.result;
+        }
+    });
+
+    $scope.open = function(id) {
+        $state.go("main", {cat:id})
     }
-
-    showDate();
-
-    var i = $interval(showDate, 1000);
-
-    $scope.$on("$destroy", function() {
-        $interval.cancel(i);
-    })
 });
 
-app.controller('programsController', function ($scope,$state,$api, $timeout) {
-
+app.controller('programsController', function ($scope,$state,$api) {
 
     $scope.$parent.isLoading = true;
     $api.get('/programs/all', {
@@ -112,21 +130,16 @@ app.controller('programsController', function ($scope,$state,$api, $timeout) {
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.programs = data.result;
-            fixHeight(document.querySelector(".post-container"));
         }
     });
 
     $scope.open = function(id) {
         $state.go("program",{id:id});
     };
+
 });
 
-app.controller('contactController', function ($scope,$state,$api, $timeout) {
-    $scope.$on('$viewContentLoaded', function() {
-        $timeout(function() {
-            fixHeight(document.querySelector("form.contact-form"));
-        }, 300);
-    });
+app.controller('ContactController', function ($scope,$state,$api) {
 
     $scope.submit = function() {
        $api.get("/contact", {
@@ -161,18 +174,14 @@ app.controller('programController', function($scope, $stateParams, $timeout, $ap
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.program = data.result;
-            fixHeight(document.querySelector(".program-info"));
         }
     });
 
 });
 
-app.controller('newsController', function($scope, $stateParams, $timeout, $api) {
+app.controller('NewsController', function($scope, $stateParams, $timeout, $api) {
 
-    $scope.news = {
-        title: "...",
-        post_whole: "..."
-    };
+    $scope.news = {};
 
     $scope.$parent.isLoading = true;
     $api.get('/news', {
@@ -181,7 +190,6 @@ app.controller('newsController', function($scope, $stateParams, $timeout, $api) 
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.news = data.result;
-            fixHeight(document.querySelector(".program-info"));
         }
     });
 
@@ -189,12 +197,21 @@ app.controller('newsController', function($scope, $stateParams, $timeout, $api) 
 
 app.controller('BodyController', function($scope, $interval, $api) {
     var self = this;
+
+    self.qualityPaths = {
+        "HQ": "/live",
+        "LQ": "/livelq"
+    };
+
     self.bclass = "";
     self.pageTitle = "";
 
     self.isAudioLoading = true;
 
+    $scope.timeStr = "00:00:00";
+
     var getCurrentProgram;
+
     $interval(getCurrentProgram = function() {
         $api.get("/programs/current", {}, function(data) {
             if(data.success)
@@ -220,9 +237,14 @@ app.controller('BodyController', function($scope, $interval, $api) {
         self.isAudioLoading = false;
     });
 
+    audio.addEventListener("timeupdate", function(e) {
+        $scope.timeStr = toHHMMSS(e.target.currentTime);
+        $scope.$apply();
+    });
+
     $scope.isLoading = true;
 
-    $scope.$on('$stateChangeStart', function(event, toState/*, toParams, fromState, fromParams*/){
+    $scope.$on('$stateChangeStart', function(){
         $scope.isLoading = true;
     });
 
@@ -240,13 +262,19 @@ app.controller('BodyController', function($scope, $interval, $api) {
         }
     });
 
-    $scope.streamSrc = "http://35.165.142.89:8000/live";
+    function setStreamSrc() {
+        $scope.streamQuality = getQuality();
+        $scope.streamSrc = "http://35.165.142.89:8000"+getQualityPath();
+        if ($scope.$root.$$phase != '$apply' && $scope.$root.$$phase != '$digest') {
+            $scope.$apply();
+        }
+    }
+    setStreamSrc();
 
     this.streamState = "playing";
     this.streamVolumeState = "enabled";
 
-    this.playPause = function() {
-        console.log("pp");
+    $scope.playPause = function() {
         if(audio.paused) {
             audio.play();
             self.streamState = "playing";
@@ -256,16 +284,89 @@ app.controller('BodyController', function($scope, $interval, $api) {
         }
     };
 
+    $scope.pause = function() {
+        if(!audio.paused) {
+            audio.pause();
+        }
+    };
+
     this.switchVolume = function() {
         audio.muted = !audio.muted;
         self.streamVolumeState = audio.muted ? "disabled" : "enabled";
+    };
+
+    function toHHMMSS(time) {
+        var sec_num = parseInt(time, 10); // don't forget the second param
+        var hours   = Math.floor(sec_num / 3600);
+        var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+        var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+        return hours+':'+minutes+':'+seconds;
+    }
+
+    function getQuality() {
+        var q = localStorage.getItem("quality");
+        if(q==null) {
+            q = "HQ";
+            localStorage.setItem("quality", q);
+        }
+        return q;
+    }
+
+    function getQualityPath() {
+        return self.qualityPaths[getQuality()];
+    }
+
+    $scope.saveQuality = function(quality) {
+        localStorage.setItem("quality", quality);
+        setStreamSrc();
+    };
+
+
+});
+
+app.controller("VideoController", function($scope) {
+    $scope.infoText = "Loading Video...";
+
+    $scope.videoSrc = "live_stream?channel=UC_3Yu0IUFzFI1wv5iqr-VjQ&enablejsapi=1&widgetid=1&origin=*#";
+
+    // Load the IFrame Player API code asynchronously.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/player_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    // Replace the 'ytplayer' element with an <iframe> and
+    // YouTube player after the API code downloads.
+    var player;
+    window.onYouTubePlayerAPIReady = function() {
+        console.log("Asf");
+        player = new YT.Player('ytplayer', {
+            height: '360',
+            width: '640',
+            videoId: "live_stream?channel=UC_3Yu0IUFzFI1wv5iqr-VjQ&enablejsapi=1&widgetid=1&origin=*&showinfo=0&controls=0&autoplay=1#",
+            autoplay: 1
+        });
     }
 
 });
 
-function fixHeight(e) {
-    if(e) {
-        var c = e.getBoundingClientRect();
-        e.style.height = (document.body.clientHeight - c.top - 71) + "px";
+app.controller("SettingsController", function($scope) {
+    $scope.mdl = {
+        quality: "1"
+    };
+
+    $scope.changeQuality = function($event) {
+        $scope.$parent.saveQuality($event.target.checked ? "HQ" : "LQ");
     }
-}
+
+});
+
+app.filter('trustAsResourceUrl', ['$sce', function($sce) {
+    return function(val) {
+        return $sce.trustAsResourceUrl(val);
+    };
+}]);

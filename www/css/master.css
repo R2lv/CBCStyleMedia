@@ -9,7 +9,7 @@ header {
     width: 100%;
     background-color: #004b8c;
     color: #ffffff;
-	line-height: 50px;
+	line-height: 60px;
     position: fixed;
     top: 0;
     z-index: 2;
@@ -18,13 +18,13 @@ header {
 .headButton {
 	color: #ffffff !important;
 	display: inline-block;
-	line-height: 50px;
+	line-height: 60px;
 	vertical-align: middle;
-	padding: 0 10px;
+	padding: 0 15px;
 }
 .headButton i {
 	display: inline-block;
-	line-height: 50px;
+	line-height: 60px;
 	float: left;
 	vertical-align: middle;
 }
@@ -34,8 +34,8 @@ header {
 	vertical-align: middle;
 }
 section {
-	margin-top: 50px;
-	padding-bottom: 50px;
+	margin-top: 60px;
+	padding-bottom: 60px;
 }
   .pinned {
     position: fixed !important;
@@ -43,7 +43,7 @@ section {
         
 
 #slide-out {
-	z-index: 11111;
+	z-index: 11;
 }
 #sidenav-overlay {
 	z-index: 1;

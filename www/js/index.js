@@ -69,7 +69,7 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
         $('.modal').modal();
 
         $(".side-nav a").click(function() {
-            $(".button-collapse").sideNav("hide");
+            // $(".button-collapse").sideNav("hide");
         });
 
     });
@@ -80,8 +80,7 @@ app.run(function($cordovaStatusbar) {
     document.addEventListener("deviceready", function() {
         $cordovaStatusbar.overlaysWebView(true);
         $cordovaStatusbar.style(2);
-        $cordovaStatusbar.styleHex("#EBE13A");
-        // $cordovaStatusbar.styleHex("#FFFFFF");
+        $cordovaStatusbar.styleHex("#003462");
     }, false);
 });
 

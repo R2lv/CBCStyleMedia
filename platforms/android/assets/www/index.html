@@ -17,7 +17,7 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<html ng-app="App">
+<html ng-app="App" ng-controller="BodyController as bodyController">
     <head>
         <!--
         Customize this policy to fit your own app's needs. For more guidance, see:
@@ -33,39 +33,93 @@
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" href="bower_components/material-design-icons/iconfont/material-icons.css">
+        <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css">
         <link rel="stylesheet" href="css/master.css">
-        <link rel="stylesheet" href="css/live.css">
         <!--<link rel="stylesheet" href="css/live.css">-->
         <title>Hello World</title>
     </head>
-    <body ng-controller="BodyController as bodyController" class="{{bodyController.bclass}}">
-
+    <body>
     <header>
-        <span class="heading">{{bodyController.pageTitle}}</span>
-        <div class="preloader" ng-show="isLoading"></div>
+        <a href="#" data-activates="slide-out" class="button-collapse headButton"><i class="material-icons">menu</i></a>
+        <span class="header-title ng-cloak">{{bodyController.pageTitle}}</span>
     </header>
 
-        <div ui-view></div>
+    <ul id="slide-out" class="side-nav">
+        <li><a href="#/">News</a></li>
+        <li><a href="#/categories">Categories</a></li>
+        <li><a href="#/shows">Shows</a></li>
+        <li><a href="#/livevideo">Live Video Stream</a></li>
+        <li><a href="#/contact">Contact Us</a></li>
+        <li><a href="#/about">About</a></li>
+        <li><a href="#/settings">Settings</a></li>
+    </ul>
 
-    <footer>
-        <ul>
-            <li><a href="#/contact"><img ng-src="{{bodyController.bclass=='contact' ? 'images/menu/1_active.png':'images/menu/1.png'}}"></a></li>
-            <li><a href="#/live"><img ng-src="{{bodyController.bclass=='live' ? 'images/menu/2_active.png':'images/menu/2.png'}}"></a></li>
-            <li><a href="#/programs"><img ng-src="{{bodyController.bclass=='programs' ? 'images/menu/3_active.png':'images/menu/3.png'}}"></a></li>
-            <li><a href="#/main"><img ng-src="{{bodyController.bclass=='' ? 'images/menu/4_active.png':'images/menu/4.png'}}"></a></li>
-        </ul>
-    </footer>
+    <section>
+        <div data-ui-view></div>
+    </section>
 
-    <div class="audioPlace" style="visibility: hidden; height: 0; width: 0; overflow: hidden">
-        <audio ng-src="{{streamSrc}}" autoplay id="stream"></audio>
+    <!-- Modal Trigger -->
+
+    <div class="radio-fixed" data-target='modal1'>
+        <div class="left waves-effect waves-light">
+            <div class="imageContainer">
+                <img src="" alt="">
+                <div class="title"></div>
+            </div>
+            <div class="text">
+                <span class="ng-cloak">{{currentProgram}}</span>
+                <p class="ng-cloak">{{currentProgram}}</p>
+            </div>
+        </div>
+        <div class="rightPlace">
+            <div class="stopres">
+                <a href="" class="play-pause play" id="playBtn" ng-click="playPause()" ng-class="{play:bodyController.streamState!='playing'}"><i class="material-icons ng-cloak">{{bodyController.streamState=='playing' ? "pause_arrow":"play_arrow"}}</i></a>
+            </div>
+        </div>
     </div>
 
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal modalFill bottom-sheet">
+        <div class="header">
+            <div class="left">
+                <a href="#!" class="modal-action modal-close waves-effect waves-light"><i style="color: white;" class="material-icons">keyboard_arrow_down</i></a>
+            </div>
+            <div class="rightAlign">
+                <div class="title">
+                    <span>{{currentProgram}}</span>
+                    <p>{{currentProgram}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="imageContainer valign-wrapper">
+                <img class="responsive-img valign" src="images/trump.jpg" alt="">
+            </div>
+            <div class="textContainer">
+                <span>{{currentProgram}}</span>
+                <!--<p>Lorem ipsum dolor.</p>-->
+            </div>
+            <div class="timeDisplay">
+                <span>{{timeStr}}</span>
+            </div>
+        </div>
+        <div class="stopres">
+            <a href="" class="play-pause" ng-click="playPause()" ng-class="{play:bodyController.streamState!='playing'}"><i class="material-icons">{{bodyController.streamState=='playing' ? "pause_arrow":"play_arrow"}}</i></a>
+        </div>
+
+        <!-- <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a> -->
+    </div>
+    <audio autoplay ng-src="{{streamSrc}}"></audio>
+        <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="bower_components/materialize/dist/js/materialize.min.js"></script>
         <script type="text/javascript" src="bower_components/angular/angular.js"></script>
         <script type="text/javascript" src="js/ng-cordova.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/apiService.js"></script>
+
     </body>
 </html>
