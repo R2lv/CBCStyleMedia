@@ -5,7 +5,8 @@ var titles = {
     program: "برامجنا",
     news: "آخر الأخبار",
     contact: "برامجنا",
-    categories: "Categories"
+    categories: "Categories",
+    shows: "Shows"
 };
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpParamSerializerProvider) {
 
@@ -32,6 +33,12 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
         controller: 'NewsController',
         templateUrl: 'views/news-full.html',
         bclass: 'news'
+    })
+    .state('shows', {
+        url: '/shows',
+        controller: 'ShowsController',
+        templateUrl: 'views/shows.html',
+        bclass: 'shows'
     })
     .state('livevideo', {
         url: '/livevideo',
@@ -200,6 +207,24 @@ app.controller('NewsController', function($scope, $stateParams, $timeout, $api) 
 
 });
 
+
+app.controller('ShowsController', function($scope, $stateParams, $timeout, $api) {
+
+    $scope.shows = {};
+
+    $scope.$parent.isLoading = true;
+    $api.get('/show/all', {
+        page: 1,
+        length: 10
+    }, function(data) {
+        if(data.success) {
+            $scope.$parent.isLoading = false;
+            $scope.shows = data.result;
+        }
+    });
+
+});
+
 app.controller('BodyController', function($scope, $interval, $api) {
     var self = this;
 
@@ -208,12 +233,16 @@ app.controller('BodyController', function($scope, $interval, $api) {
         "LQ": "/livelq"
     };
 
-    self.bclass = "";
-    self.pageTitle = "";
+    $scope.$vars = {
+        pageTitle: "",
+        live: true,
+        timeStr: "00:00:00",
+        pageClass: "",
+        streamVolumeState: "enabled",
+        playing: "playing",
+        isAudioLoading: true
+    };
 
-    self.isAudioLoading = true;
-
-    $scope.timeStr = "00:00:00";
 
     var getCurrentProgram;
 
@@ -228,24 +257,31 @@ app.controller('BodyController', function($scope, $interval, $api) {
 
     var audio = document.querySelector('audio');
 
-    audio.addEventListener("ended", function() {
-        self.isAudioLoading = true;
-        audio.load();
-    });
+    {
+        /* Setting Audio Event Listeners */
 
-    audio.addEventListener("error", function() {
-        self.isAudioLoading = true;
-        audio.load();
-    });
+        audio.addEventListener("ended", function () {
+            $scope.$vars.isAudioLoading = true;
+            $scope.$apply();
+            audio.load();
+        });
 
-    audio.addEventListener("play", function() {
-        self.isAudioLoading = false;
-    });
+        audio.addEventListener("error", function () {
+            $scope.$vars.isAudioLoading = true;
+            $scope.$apply();
+            audio.load();
+        });
 
-    audio.addEventListener("timeupdate", function(e) {
-        $scope.timeStr = toHHMMSS(e.target.currentTime);
-        $scope.$apply();
-    });
+        audio.addEventListener("play", function () {
+            $scope.$vars.isAudioLoading = false;
+            $scope.$apply();
+        });
+
+        audio.addEventListener("timeupdate", function (e) {
+            $scope.$vars.timeStr = toHHMMSS(e.target.currentTime);
+            $scope.$apply();
+        });
+    }
 
     $scope.isLoading = true;
 
@@ -255,17 +291,78 @@ app.controller('BodyController', function($scope, $interval, $api) {
 
     $scope.$on('$stateChangeSuccess', function(event, toState/*, toParams, fromState, fromParams*/){
         if (angular.isDefined(toState.bclass)) {
-            self.bclass = toState.bclass;
+            $scope.$vars.pageClass = toState.bclass;
         } else {
-            self.bclass = "";
+            $scope.$vars.pageClass = "";
         }
 
         $scope.isLoading = false;
 
         if(angular.isDefined(titles[toState.name])) {
-            self.pageTitle = titles[toState.name];
+            $scope.$vars.pageTitle = titles[toState.name];
         }
     });
+
+
+
+
+    $scope.$player = {
+        loadAudio: function(url) {
+            $scope.$vars.live = false;
+            $scope.streamSrc = url;
+        },
+        loadLiveStream: function() {
+            $scope.$vars.live = true;
+            setStreamSrc();
+        },
+
+        playPause: function() {
+            if(audio.paused) {
+                audio.play();
+                self.streamState = "playing";
+            } else {
+                audio.pause();
+                self.streamState = "paused";
+            }
+        },
+        pause: function() {
+            if(!audio.paused) {
+                audio.pause();
+            }
+        },
+        playPrev: function() {
+            if($scope.live) return;
+            // previous
+        },
+        playNext: function() {
+            if($scope.live) return;
+            // next
+        },
+        back: function(time) {
+            if($scope.live) return;
+
+            if(audio.currentTime - time >= audio.duration) {
+                audio.currentTime -= time;
+            }
+
+            // back {time} seconds
+        },
+        next: function(time) {
+            if($scope.live) return;
+
+            if(audio.currentTime + time <= audio.duration) {
+                audio.currentTime += time;
+            }
+            // next {time} seconds
+        },
+        switchVolume: function() {
+            audio.muted = !audio.muted;
+            $scope.$vars.streamVolumeState = audio.muted ? "disabled" : "enabled";
+        }
+    };
+
+
+    $scope.$player.loadLiveStream();
 
     function setStreamSrc() {
         $scope.streamQuality = getQuality();
@@ -274,31 +371,6 @@ app.controller('BodyController', function($scope, $interval, $api) {
             $scope.$apply();
         }
     }
-    setStreamSrc();
-
-    this.streamState = "playing";
-    this.streamVolumeState = "enabled";
-
-    $scope.playPause = function() {
-        if(audio.paused) {
-            audio.play();
-            self.streamState = "playing";
-        } else {
-            audio.pause();
-            self.streamState = "paused";
-        }
-    };
-
-    $scope.pause = function() {
-        if(!audio.paused) {
-            audio.pause();
-        }
-    };
-
-    this.switchVolume = function() {
-        audio.muted = !audio.muted;
-        self.streamVolumeState = audio.muted ? "disabled" : "enabled";
-    };
 
     function toHHMMSS(time) {
         var sec_num = parseInt(time, 10); // don't forget the second param

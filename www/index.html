@@ -42,7 +42,7 @@
     <body>
     <header>
         <a href="#" data-activates="slide-out" class="button-collapse headButton"><i class="material-icons">menu</i></a>
-        <span class="header-title ng-cloak">{{bodyController.pageTitle}}</span>
+        <span class="header-title ng-cloak">{{$vars.pageTitle}}</span>
     </header>
 
     <ul id="slide-out" class="side-nav">
@@ -73,7 +73,7 @@
             </div>
         </div>
         <div class="rightPlace">
-            <div class="stopres">
+            <div class="controls">
                 <a href="" class="play-pause play" id="playBtn" ng-click="playPause()" ng-class="{play:bodyController.streamState!='playing'}"><i class="material-icons ng-cloak">{{bodyController.streamState=='playing' ? "pause_arrow":"play_arrow"}}</i></a>
             </div>
         </div>
@@ -102,11 +102,15 @@
                 <!--<p>Lorem ipsum dolor.</p>-->
             </div>
             <div class="timeDisplay">
-                <span>{{timeStr}}</span>
+                <span>{{$vars.timeStr}}</span>
             </div>
         </div>
-        <div class="stopres">
-            <a href="" class="play-pause" ng-click="playPause()" ng-class="{play:bodyController.streamState!='playing'}"><i class="material-icons">{{bodyController.streamState=='playing' ? "pause_arrow":"play_arrow"}}</i></a>
+        <div class="controls">
+            <a href="" class="skip back" ng-click="$player.playPrev()" ng-class="{disabled:$vars.live}"><i class="material-icons">skip_previous</i></a>
+            <a href="" class="small_skip back" ng-click="$player.back(10)" ng-class="{disabled:$vars.live}"><i class="material-icons">replay_10</i></a>
+            <a href="" class="play-pause" ng-click="$player.playPause()" ng-class="{play:bodyController.streamState!='playing'}"><i class="material-icons">{{bodyController.streamState=='playing' ? "pause_arrow":"play_arrow"}}</i></a>
+            <a href="" class="small_skip next" ng-click="$player.next(10)" ng-class="{disabled:$vars.live}"><i class="material-icons">forward_10</i></a>
+            <a href="" class="skip next" ng-click="$player.playNext()" ng-class="{disabled:$vars.live}"><i class="material-icons">skip_next</i></a>
         </div>
 
         <!-- <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a> -->
