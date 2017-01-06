@@ -4,6 +4,10 @@ html, body {
 	background-color: #F5F5F5;
 }
 
+input, a {
+    outline: none !important;
+}
+
 header {
     width: 100%;
     background-color: #004b8c;
@@ -270,6 +274,15 @@ section .row {
 	display: inline-block;
 	width: 100%;
 	box-sizing: border-box;
+}
+
+.card-title a {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+	display: block;
+	font-size: 20px;
 }
 
 .category-list {

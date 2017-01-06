@@ -39,4 +39,5 @@
     <preference name="loglevel" value="DEBUG" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="portrait" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
 </widget>
