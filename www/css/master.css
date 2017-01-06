@@ -430,3 +430,9 @@ section .row {
 	width: 60%;
 	height: 20px;
 }
+
+.empty {
+	font-weight: bold;
+	padding: 10px !important;
+	background: #FFF;
+}

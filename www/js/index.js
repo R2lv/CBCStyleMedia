@@ -137,6 +137,8 @@ app.controller("MainController", function($scope, $stateParams, $http, $state, $
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.news = data.result;
+        } else {
+            $scope.news = [];
         }
     });
 
