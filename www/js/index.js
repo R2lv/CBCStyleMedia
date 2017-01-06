@@ -1,6 +1,6 @@
 var app = angular.module('App', ['ngCordova','ui.router']);
 var titles = {
-    main: "CBC Radio",
+    main: "Ajman University Media Broadcast",
     programs: "خلكم وينا",
     program: "برامجنا",
     news: "آخر الأخبار",
@@ -116,6 +116,19 @@ app.controller("MainController", function($scope, $stateParams, $http, $state, $
 
     var url = parseInt($stateParams.cat) ? "/news/cat" : "/news/all";
 
+
+    $scope.news = [
+        {
+            loading: true
+        },
+        {
+            loading: true
+        },
+        {
+            loading: true
+        }
+    ];
+
     $api.get(url, {
         'page':1,
         'length':10,
@@ -207,7 +220,15 @@ app.controller('programController', function($scope, $stateParams, $timeout, $ap
 
 app.controller('NewsController', function($scope, $stateParams, $timeout, $api) {
 
-    $scope.news = {};
+    $scope.news = [
+        {
+            loading: true,
+            id: null,
+            title: "...",
+            post_intro: "..."
+        }
+    ];
+
 
     $scope.$parent.isLoading = true;
     $api.get('/news', {

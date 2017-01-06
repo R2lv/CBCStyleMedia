@@ -390,3 +390,30 @@ section .row {
 	font-size: 12px;
 	color: #777;
 }
+
+.inContainer .card.loading {
+	margin: 10px 10px 0;
+}
+.inContainer .card.loading .grad {
+	display: none;
+}
+
+.inContainer .card.loading img {
+	height: 150px;
+	background: #FFF;
+}
+
+.inContainer .card.loading .card-title > a {
+	background: rgba(0, 0, 0, 0.1);
+	color: transparent;
+	display: inline-block;
+	width: 70%;
+	height: 20px;
+}
+.inContainer .card.loading .card-title > span.post-intro {
+	display: inline-block;
+	background: rgba(0, 0, 0, 0.1);
+	color: transparent;
+	width: 60%;
+	height: 20px;
+}

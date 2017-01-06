@@ -15,6 +15,9 @@
         },
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "io.cordova.hellocordova"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "ae.ac.college.media"
         }
     },
     "dependent_plugins": {

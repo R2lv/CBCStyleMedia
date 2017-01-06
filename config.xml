@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="ae.ac.college.media" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Media College Studio</name>
+    <name>Ajman University Media Broadcast</name>
     <description>
-        Media College Studio App
+        Ajman University Media Broadcast
     </description>
-    <author email="android.giorgi@gmail.com" href="http://google.com/">
+    <author email="giorgi@tabatadze.me" href="https://tabatadze.me/">
         Giorgi Tabatadze
     </author>
     <content src="index.html" />

@@ -1,11 +1,12 @@
 var app = angular.module('App', ['ngCordova','ui.router']);
 var titles = {
-    main: "CBC Radio",
+    main: "Ajman University Media Broadcast",
     programs: "خلكم وينا",
     program: "برامجنا",
     news: "آخر الأخبار",
     contact: "برامجنا",
-    categories: "Categories"
+    categories: "Categories",
+    shows: "Shows"
 };
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpParamSerializerProvider) {
 
@@ -13,37 +14,57 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
     .state('main', {
         url: '/newses/:cat',
         controller: 'MainController',
-        templateUrl: 'views/news.html'
+        templateUrl: 'views/news.html',
+        headButton: "menu"
     })
     .state('categories', {
         url: '/categories',
         controller: 'CatsController',
         templateUrl: 'views/categories.html',
-        bclass: "categories"
+        bclass: "categories",
+        headButton: "menu"
     })
     .state('contact', {
         url: '/contact',
         controller: 'ContactController',
         templateUrl: 'views/contact.html',
-        bclass: "contact"
+        bclass: "contact",
+        headButton: "menu"
     })
     .state('news', {
         url: '/news/{id:int}',
         controller: 'NewsController',
         templateUrl: 'views/news-full.html',
-        bclass: 'news'
+        bclass: 'news',
+        headButton: "back"
+    })
+    .state('shows', {
+        url: '/shows',
+        controller: 'ShowsController',
+        templateUrl: 'views/shows.html',
+        bclass: 'shows',
+        headButton: "menu"
+    })
+    .state('show-list', {
+        url: '/show-list/{id:int}',
+        controller: 'ShowListController',
+        templateUrl: 'views/show-item-list.html',
+        bclass: 'show-list',
+        headButton: "back"
     })
     .state('livevideo', {
         url: '/livevideo',
         controller: 'VideoController',
         templateUrl: 'views/livevideo.html',
-        bclass: 'news'
+        bclass: 'news',
+        headButton: "menu"
     })
     .state('settings', {
         url: '/settings',
         controller: 'SettingsController',
         templateUrl: 'views/settings.html',
-        bclass: 'settings'
+        bclass: 'settings',
+        headButton: "menu"
     });
 
     $urlRouterProvider.otherwise('/newses/0');
@@ -200,6 +221,48 @@ app.controller('NewsController', function($scope, $stateParams, $timeout, $api) 
 
 });
 
+
+app.controller('ShowListController', function($scope, $stateParams, $timeout, $api) {
+
+    $scope.show = {};
+
+    $scope.$parent.isLoading = true;
+    $api.get('/show/get', {
+        id: $stateParams.id
+    }, function(data) {
+        if(data.success) {
+            $scope.$parent.isLoading = false;
+            $scope.show = data.result.show;
+        }
+    });
+
+    $scope.play = function(id) {
+        $scope.$parent.$player.loadAudio($scope.show,id);
+        $('#modal1').modal('open');
+    }
+
+});
+app.controller('ShowsController', function($scope, $state, $stateParams, $timeout, $api) {
+
+    $scope.shows = {};
+
+    $scope.$parent.isLoading = true;
+    $api.get('/show/all', {
+        page: 1,
+        length: 10
+    }, function(data) {
+        if(data.success) {
+            $scope.$parent.isLoading = false;
+            $scope.shows = data.result;
+        }
+    });
+
+    $scope.open = function(id) {
+        $state.go("show-list", {id:id});
+    }
+
+});
+
 app.controller('BodyController', function($scope, $interval, $api) {
     var self = this;
 
@@ -208,44 +271,74 @@ app.controller('BodyController', function($scope, $interval, $api) {
         "LQ": "/livelq"
     };
 
-    self.bclass = "";
-    self.pageTitle = "";
+    $scope.$vars = {
+        pageTitle: "",
+        live: true,
+        timeStr: "00:00:00",
+        pageClass: "",
+        streamVolumeState: "enabled",
+        streamState: "playing",
+        isAudioLoading: true,
+        headButton: "menu",
+        currentProgram: "",
+        show: {
+            currentList: null,
+            currentItem: null
+        }
+    };
 
-    self.isAudioLoading = true;
+    $scope.goBack = function() {
+        history.go(-1);
+    };
 
-    $scope.timeStr = "00:00:00";
+    var getCurrentProgramInterval;
 
-    var getCurrentProgram;
+    function runCurrentProgramInterval() {
+        var getCurrentProgram;
+        getCurrentProgramInterval = $interval(getCurrentProgram = function () {
+            $api.get("/programs/current", {}, function (data) {
+                if (data.success)
+                    $scope.$vars.currentProgram = data.result;
+            });
+        }, 10000);
+        getCurrentProgram();
+    }
 
-    $interval(getCurrentProgram = function() {
-        $api.get("/programs/current", {}, function(data) {
-            if(data.success)
-                $scope.currentProgram = data.result.title;
-        });
-    },10000);
-
-    getCurrentProgram();
 
     var audio = document.querySelector('audio');
 
-    audio.addEventListener("ended", function() {
-        self.isAudioLoading = true;
-        audio.load();
-    });
+    {
+        /* Setting Audio Event Listeners */
 
-    audio.addEventListener("error", function() {
-        self.isAudioLoading = true;
-        audio.load();
-    });
+        audio.addEventListener("ended", function () {
+            $scope.$vars.isAudioLoading = true;
+            $scope.$vars.streamState = "paused";
+            $scope.$apply();
+            audio.load();
+        });
 
-    audio.addEventListener("play", function() {
-        self.isAudioLoading = false;
-    });
+        audio.addEventListener("error", function () {
+            $scope.$vars.isAudioLoading = true;
+            $scope.$vars.streamState = "paused";
+            $scope.$apply();
+            audio.load();
+        });
 
-    audio.addEventListener("timeupdate", function(e) {
-        $scope.timeStr = toHHMMSS(e.target.currentTime);
-        $scope.$apply();
-    });
+        audio.addEventListener("play", function () {
+            $scope.$vars.isAudioLoading = false;
+            $scope.$vars.streamState = "playing";
+            $scope.$apply();
+        });
+        audio.addEventListener("pause", function () {
+            $scope.$vars.streamState = "paused";
+            $scope.$apply();
+        });
+
+        audio.addEventListener("timeupdate", function (e) {
+            $scope.$vars.timeStr = toHHMMSS(e.target.currentTime);
+            $scope.$apply();
+        });
+    }
 
     $scope.isLoading = true;
 
@@ -255,17 +348,88 @@ app.controller('BodyController', function($scope, $interval, $api) {
 
     $scope.$on('$stateChangeSuccess', function(event, toState/*, toParams, fromState, fromParams*/){
         if (angular.isDefined(toState.bclass)) {
-            self.bclass = toState.bclass;
+            $scope.$vars.pageClass = toState.bclass;
         } else {
-            self.bclass = "";
+            $scope.$vars.pageClass = "";
+        }
+
+        if(angular.isDefined(toState.headButton)) {
+            $scope.$vars.headButton = toState.headButton;
         }
 
         $scope.isLoading = false;
 
         if(angular.isDefined(titles[toState.name])) {
-            self.pageTitle = titles[toState.name];
+            $scope.$vars.pageTitle = titles[toState.name];
         }
     });
+
+
+
+
+    $scope.$player = {
+        loadAudio: function(show,id) {
+            $scope.$vars.live = false;
+            $scope.streamSrc = "http://35.165.142.89"+show.list[id].music_link;
+            $interval.cancel(getCurrentProgramInterval);
+
+            $scope.$vars.currentProgram = {
+                title: show.list[id].title,
+                image: "http://35.165.142.89"+show.image
+            };
+
+        },
+        loadLiveStream: function() {
+            $scope.$vars.live = true;
+            setStreamSrc();
+            runCurrentProgramInterval();
+        },
+
+        playPause: function() {
+            if(audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
+        },
+
+        pause: function() {
+            if(!audio.paused) {
+                audio.pause();
+            }
+        },
+        playPrev: function() {
+            if($scope.$vars.live) return;
+            // previous
+        },
+        playNext: function() {
+            if($scope.$vars.live) return;
+            // next
+        },
+        back: function(time) {
+            if($scope.$vars.live) return;
+            if(audio.currentTime - time >= 0) {
+                audio.currentTime -= time;
+            }
+
+            // back {time} seconds
+        },
+        next: function(time) {
+            if($scope.$vars.live) return;
+
+            if(audio.currentTime + time <= audio.duration) {
+                audio.currentTime += time;
+            }
+            // next {time} seconds
+        },
+        switchVolume: function() {
+            audio.muted = !audio.muted;
+            $scope.$vars.streamVolumeState = audio.muted ? "disabled" : "enabled";
+        }
+    };
+
+
+    $scope.$player.loadLiveStream();
 
     function setStreamSrc() {
         $scope.streamQuality = getQuality();
@@ -274,31 +438,6 @@ app.controller('BodyController', function($scope, $interval, $api) {
             $scope.$apply();
         }
     }
-    setStreamSrc();
-
-    this.streamState = "playing";
-    this.streamVolumeState = "enabled";
-
-    $scope.playPause = function() {
-        if(audio.paused) {
-            audio.play();
-            self.streamState = "playing";
-        } else {
-            audio.pause();
-            self.streamState = "paused";
-        }
-    };
-
-    $scope.pause = function() {
-        if(!audio.paused) {
-            audio.pause();
-        }
-    };
-
-    this.switchVolume = function() {
-        audio.muted = !audio.muted;
-        self.streamVolumeState = audio.muted ? "disabled" : "enabled";
-    };
 
     function toHHMMSS(time) {
         var sec_num = parseInt(time, 10); // don't forget the second param

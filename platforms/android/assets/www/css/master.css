@@ -1,9 +1,8 @@
 html, body {
 	margin: 0;
 	padding: 0;
-
+	background-color: #F5F5F5;
 }
-
 
 header {
     width: 100%;
@@ -155,12 +154,12 @@ section .row {
 	width: 20%; 
 	font-size: 15px;
 }
-.radio-fixed .rightPlace .stopres a {
+.radio-fixed .rightPlace .controls > a {
     display: inline-block;
     width: 100%;
     height: 100%;
 }
-.radio-fixed .rightPlace .stopres i {
+.radio-fixed .rightPlace .controls i {
 	color: #ffffff;
     font-size: 68px;
 }
@@ -212,10 +211,11 @@ section .row {
 	width: 100%;
 	height: 85%;
     overflow: hidden;
-
+	background: rgba(255,255,255,0.2);
 }
-.modalFill .imageContainer img {
 
+.modalFill .imageContainer img {
+	width: 100%;
 }
 .modalFill .textContainer {
 	text-align: center;
@@ -228,27 +228,40 @@ section .row {
 	text-align: center;
 	font-size: 20px !important;
 }
-.modalFill .stopres {
+.modalFill .controls {
     position: absolute;
     bottom: 2px;
 	width: 100%;
+	text-align: center;
 }
-.modalFill .stopres i {
+.modalFill .controls i {
 	font-size: 60px;
 	color: white;
 	width: 60px;
+	line-height: 60px;
+	vertical-align: middle;
 }
-.modalFill .stopres a {
-	display: block; 
+.modalFill .controls > a {
+	display: inline-block;
     width: 60px; 
     height: 60px;
     margin: 0 auto;
     overflow: hidden;
+	text-align: center;
+}
+
+.modalFill .controls > a.disabled i {
+	color: grey !important;
+}
+
+.modalFill .controls > a.small_skip i, .modalFill .controls > a.skip i {
+	font-size: 40px;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
 	color: transparent !important;
 }
+
 
 .post-intro {
 	overflow: hidden;
@@ -336,4 +349,44 @@ section .row {
 	font-weight: bold;
 	font-size: 12px;
 	padding: 0 15px !important;
+}
+
+.shows .show {
+	padding: 7px;
+}
+
+.shows .show .card-title {
+	background: rgba(0,0,0,0.7);
+	padding: 2px 10px;
+	color: #FFF;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 18px;
+}
+
+.show-list img.show-image {
+	width: 100%;
+}
+
+.show-image-wrapper {
+	max-height: 250px;
+	overflow: hidden;
+	text-align: center;
+	position: relative;
+}
+
+.show-item {
+	padding: 10px 20px !important;
+	border-bottom: 1px solid #AAA;
+}
+
+.show-item .item-title {
+	color: #000;
+	font-weight: bold;
+}
+
+.show-item .item-info {
+	font-size: 12px;
+	color: #777;
 }
