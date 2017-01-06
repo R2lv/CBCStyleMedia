@@ -262,6 +262,7 @@ section .row {
 	color: transparent !important;
 }
 
+
 .post-intro {
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -362,4 +363,30 @@ section .row {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	font-size: 18px;
+}
+
+.show-list img.show-image {
+	width: 100%;
+}
+
+.show-image-wrapper {
+	max-height: 250px;
+	overflow: hidden;
+	text-align: center;
+	position: relative;
+}
+
+.show-item {
+	padding: 10px 20px !important;
+	border-bottom: 1px solid #AAA;
+}
+
+.show-item .item-title {
+	color: #000;
+	font-weight: bold;
+}
+
+.show-item .item-info {
+	font-size: 12px;
+	color: #777;
 }
