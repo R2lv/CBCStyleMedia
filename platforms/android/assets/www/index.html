@@ -46,7 +46,7 @@
         <span class="header-title ng-cloak">{{$vars.pageTitle}}</span>
     </header>
 
-    <ul id="slide-out" class="side-nav">
+    <ul id="slide-out" class="side-nav fixed">
         <li><a href="#/">News</a></li>
         <li><a href="#/categories">Categories</a></li>
         <li><a href="#/shows">Shows</a></li>
@@ -64,12 +64,11 @@
 
     <div class="radio-fixed" data-target='modal1'>
         <div class="left waves-effect waves-light">
-            <div class="imageContainer">
-                <img ng-src="{{$vars.currentProgram.image}}" class="responsive-img" alt="">
+            <div class="imageContainer valign-wrapper">
+                <img ng-src="http://35.165.142.89{{$vars.currentProgram.image}}" class="responsive-img valign" alt="">
             </div>
-            <div class="text">
-                <span class="ng-cloak">{{$vars.currentProgram.title}}</span>
-                <p class="ng-cloak">{{$vars.currentProgram.title}}</p>
+            <div class="text valign-wrapper">
+                <span class="ng-cloak valign">{{$vars.currentProgram.title}}</span>
             </div>
         </div>
         <div class="rightPlace">
@@ -86,16 +85,15 @@
             <div class="left">
                 <a href="javascript:void(0)" class="modal-action modal-close waves-effect waves-light"><i style="color: white;" class="material-icons">keyboard_arrow_down</i></a>
             </div>
-            <div class="rightAlign">
-                <div class="title">
+            <div class="rightAlign valign-wrapper">
+                <div class="title valign">
                     <span>{{$vars.currentProgram.title}}</span>
-                    <p>{{$vars.currentProgram.title}}</p>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="imageContainer valign-wrapper">
-                <img class="responsive-img valign" ng-src="{{$vars.currentProgram.image}}" alt="">
+                <img class="responsive-img valign" ng-src="http://35.165.142.89{{$vars.currentProgram.image}}" alt="">
             </div>
             <div class="textContainer">
                 <span>{{$vars.currentProgram.title}}</span>

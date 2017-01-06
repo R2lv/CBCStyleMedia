@@ -206,7 +206,8 @@ module.exports.metadata =
     "cordova-plugin-file": "4.3.0",
     "cordova-plugin-http": "1.2.0",
     "cordova-plugin-statusbar": "2.2.0",
-    "cordova-plugin-splashscreen": "4.0.1"
+    "cordova-plugin-splashscreen": "4.0.1",
+    "cordova-plugin-crosswalk-webview": "2.2.0"
 };
 // BOTTOM OF METADATA
 });

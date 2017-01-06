@@ -79,7 +79,9 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
 
         $(".button-collapse").sideNav({
             closeOnClick: true,
-            menuWidth: 250
+            menuWidth: 250,
+            edge: 'left',
+            draggable: false
         });
         // Initialize collapsible (uncomment the line below if you use the dropdown variation)
         $('.collapsible').collapsible();
@@ -137,6 +139,8 @@ app.controller("MainController", function($scope, $stateParams, $http, $state, $
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.news = data.result;
+        } else {
+            $scope.news = [];
         }
     });
 
@@ -284,7 +288,7 @@ app.controller('ShowsController', function($scope, $state, $stateParams, $timeou
 
 });
 
-app.controller('BodyController', function($scope, $interval, $api) {
+app.controller('BodyController', function($scope, $interval, $timeout, $api) {
     var self = this;
 
     self.qualityPaths = {
@@ -301,7 +305,10 @@ app.controller('BodyController', function($scope, $interval, $api) {
         streamState: "playing",
         isAudioLoading: true,
         headButton: "menu",
-        currentProgram: "",
+        currentProgram: {
+            title: "",
+            image: ""
+        },
         show: {
             currentList: null,
             currentItem: null
@@ -320,6 +327,7 @@ app.controller('BodyController', function($scope, $interval, $api) {
             $api.get("/programs/current", {}, function (data) {
                 if (data.success)
                     $scope.$vars.currentProgram = data.result;
+                console.log(data.result);
             });
         }, 10000);
         getCurrentProgram();
@@ -335,14 +343,18 @@ app.controller('BodyController', function($scope, $interval, $api) {
             $scope.$vars.isAudioLoading = true;
             $scope.$vars.streamState = "paused";
             $scope.$apply();
-            audio.load();
+            $timeout(function() {
+                audio.load();
+            },5000);
         });
 
         audio.addEventListener("error", function () {
             $scope.$vars.isAudioLoading = true;
             $scope.$vars.streamState = "paused";
             $scope.$apply();
-            audio.load();
+            $timeout(function() {
+                audio.load();
+            },5000);
         });
 
         audio.addEventListener("play", function () {
@@ -390,14 +402,24 @@ app.controller('BodyController', function($scope, $interval, $api) {
 
     $scope.$player = {
         loadAudio: function(show,id) {
+
+
+            if(show!=null) {
+                $scope.$vars.currentProgram = {
+                    title: show.list[id].title,
+                    image: show.image
+                };
+                $scope.$vars.show.currentList = show.list;
+            } else {
+                $scope.$vars.currentProgram.title = $scope.$vars.show.currentList[id].title;
+            }
+
             $scope.$vars.live = false;
-            $scope.streamSrc = "http://35.165.142.89"+show.list[id].music_link;
+            $scope.streamSrc = "http://35.165.142.89"+$scope.$vars.show.currentList[id].music_link;
             $interval.cancel(getCurrentProgramInterval);
 
-            $scope.$vars.currentProgram = {
-                title: show.list[id].title,
-                image: "http://35.165.142.89"+show.image
-            };
+
+            $scope.$vars.show.currentItem = id;
 
         },
         loadLiveStream: function() {
@@ -421,10 +443,17 @@ app.controller('BodyController', function($scope, $interval, $api) {
         },
         playPrev: function() {
             if($scope.$vars.live) return;
+
+            if($scope.$vars.show.currentList!=null && $scope.$vars.show.currentList[$scope.$vars.show.currentItem-1] != undefined) {
+                $scope.$player.loadAudio(null, $scope.$vars.show.currentItem-1);
+            }
             // previous
         },
         playNext: function() {
             if($scope.$vars.live) return;
+            if($scope.$vars.show.currentList!=null && $scope.$vars.show.currentList[$scope.$vars.show.currentItem+1] != undefined) {
+                $scope.$player.loadAudio(null, $scope.$vars.show.currentItem+1);
+            }
             // next
         },
         back: function(time) {
@@ -448,6 +477,7 @@ app.controller('BodyController', function($scope, $interval, $api) {
             $scope.$vars.streamVolumeState = audio.muted ? "disabled" : "enabled";
         }
     };
+
 
 
     $scope.$player.loadLiveStream();

@@ -1,12 +1,12 @@
 var app = angular.module('App', ['ngCordova','ui.router']);
 var titles = {
     main: "Ajman University Media Broadcast",
-    programs: "خلكم وينا",
-    program: "برامجنا",
-    news: "آخر الأخبار",
-    contact: "برامجنا",
+    news: "",
+    contact: "Contact Us",
     categories: "Categories",
-    shows: "Shows"
+    shows: "Shows",
+    settings: "Settings",
+    livevideo: "Live TV"
 };
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpParamSerializerProvider) {
 
@@ -79,7 +79,9 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
 
         $(".button-collapse").sideNav({
             closeOnClick: true,
-            menuWidth: 250
+            menuWidth: 250,
+            edge: 'left',
+            draggable: false
         });
         // Initialize collapsible (uncomment the line below if you use the dropdown variation)
         $('.collapsible').collapsible();
@@ -239,6 +241,7 @@ app.controller('NewsController', function($scope, $stateParams, $timeout, $api) 
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.news = data.result;
+            $scope.$parent.$vars.pageTitle = data.result.title;
         }
     });
 
@@ -256,6 +259,7 @@ app.controller('ShowListController', function($scope, $stateParams, $timeout, $a
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.show = data.result.show;
+            $scope.$parent.$vars.pageTitle = data.result.show.title;
         }
     });
 
@@ -286,7 +290,7 @@ app.controller('ShowsController', function($scope, $state, $stateParams, $timeou
 
 });
 
-app.controller('BodyController', function($scope, $interval, $api) {
+app.controller('BodyController', function($scope, $interval, $timeout, $api) {
     var self = this;
 
     self.qualityPaths = {
@@ -341,14 +345,18 @@ app.controller('BodyController', function($scope, $interval, $api) {
             $scope.$vars.isAudioLoading = true;
             $scope.$vars.streamState = "paused";
             $scope.$apply();
-            audio.load();
+            $timeout(function() {
+                audio.load();
+            },5000);
         });
 
         audio.addEventListener("error", function () {
             $scope.$vars.isAudioLoading = true;
             $scope.$vars.streamState = "paused";
             $scope.$apply();
-            audio.load();
+            $timeout(function() {
+                audio.load();
+            },5000);
         });
 
         audio.addEventListener("play", function () {
