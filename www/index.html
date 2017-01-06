@@ -37,11 +37,12 @@
         <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css">
         <link rel="stylesheet" href="css/master.css">
         <!--<link rel="stylesheet" href="css/live.css">-->
-        <title>Hello World</title>
+        <title>{{$vars.pageTitle}}</title>
     </head>
     <body>
     <header>
-        <a href="#" data-activates="slide-out" class="button-collapse headButton"><i class="material-icons">menu</i></a>
+        <a href="#" ng-show="$vars.headButton=='menu'" data-activates="slide-out" class="button-collapse headButton ng-cloak"><i class="material-icons">menu</i></a>
+        <a href="#" ng-show="$vars.headButton=='back'" ng-click="goBack()" class="headButton ng-cloak"><i class="material-icons">arrow_back</i></a>
         <span class="header-title ng-cloak">{{$vars.pageTitle}}</span>
     </header>
 
@@ -64,12 +65,11 @@
     <div class="radio-fixed" data-target='modal1'>
         <div class="left waves-effect waves-light">
             <div class="imageContainer">
-                <img src="" alt="">
-                <div class="title"></div>
+                <img ng-src="{{$vars.currentProgram.image}}" class="responsive-img" alt="">
             </div>
             <div class="text">
-                <span class="ng-cloak">{{currentProgram}}</span>
-                <p class="ng-cloak">{{currentProgram}}</p>
+                <span class="ng-cloak">{{$vars.currentProgram.title}}</span>
+                <p class="ng-cloak">{{$vars.currentProgram.title}}</p>
             </div>
         </div>
         <div class="rightPlace">
@@ -88,17 +88,17 @@
             </div>
             <div class="rightAlign">
                 <div class="title">
-                    <span>{{currentProgram}}</span>
-                    <p>{{currentProgram}}</p>
+                    <span>{{$vars.currentProgram.title}}</span>
+                    <p>{{$vars.currentProgram.title}}</p>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="imageContainer valign-wrapper">
-                <img class="responsive-img valign" src="images/trump.jpg" alt="">
+                <img class="responsive-img valign" ng-src="{{$vars.currentProgram.image}}" alt="">
             </div>
             <div class="textContainer">
-                <span>{{currentProgram}}</span>
+                <span>{{$vars.currentProgram.title}}</span>
                 <!--<p>Lorem ipsum dolor.</p>-->
             </div>
             <div class="timeDisplay">

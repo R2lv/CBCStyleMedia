@@ -211,11 +211,11 @@ section .row {
 	width: 100%;
 	height: 85%;
     overflow: hidden;
-
+	background: rgba(255,255,255,0.2);
 }
 
 .modalFill .imageContainer img {
-
+	width: 100%;
 }
 .modalFill .textContainer {
 	text-align: center;

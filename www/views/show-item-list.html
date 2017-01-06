@@ -4,7 +4,7 @@
     </div>
 
     <div class="row">
-        <div class="col s12 show-item waves-effect card white" ng-click="play(item.music_link)"  ng-repeat="item in show.list">
+        <div class="col s12 show-item waves-effect card white" ng-click="play(id)"  ng-repeat="(id,item) in show.list">
             <div class="item-title ng-cloak">{{item.title}}</div>
             <div class="item-info">
                 <span class="date ng-cloak">{{item.created_at}}</span>

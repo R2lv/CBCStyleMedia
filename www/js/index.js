@@ -14,49 +14,57 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
     .state('main', {
         url: '/newses/:cat',
         controller: 'MainController',
-        templateUrl: 'views/news.html'
+        templateUrl: 'views/news.html',
+        headButton: "menu"
     })
     .state('categories', {
         url: '/categories',
         controller: 'CatsController',
         templateUrl: 'views/categories.html',
-        bclass: "categories"
+        bclass: "categories",
+        headButton: "menu"
     })
     .state('contact', {
         url: '/contact',
         controller: 'ContactController',
         templateUrl: 'views/contact.html',
-        bclass: "contact"
+        bclass: "contact",
+        headButton: "menu"
     })
     .state('news', {
         url: '/news/{id:int}',
         controller: 'NewsController',
         templateUrl: 'views/news-full.html',
-        bclass: 'news'
+        bclass: 'news',
+        headButton: "back"
     })
     .state('shows', {
         url: '/shows',
         controller: 'ShowsController',
         templateUrl: 'views/shows.html',
-        bclass: 'shows'
+        bclass: 'shows',
+        headButton: "menu"
     })
     .state('show-list', {
         url: '/show-list/{id:int}',
         controller: 'ShowListController',
         templateUrl: 'views/show-item-list.html',
-        bclass: 'show-list'
+        bclass: 'show-list',
+        headButton: "back"
     })
     .state('livevideo', {
         url: '/livevideo',
         controller: 'VideoController',
         templateUrl: 'views/livevideo.html',
-        bclass: 'news'
+        bclass: 'news',
+        headButton: "menu"
     })
     .state('settings', {
         url: '/settings',
         controller: 'SettingsController',
         templateUrl: 'views/settings.html',
-        bclass: 'settings'
+        bclass: 'settings',
+        headButton: "menu"
     });
 
     $urlRouterProvider.otherwise('/newses/0');
@@ -228,9 +236,8 @@ app.controller('ShowListController', function($scope, $stateParams, $timeout, $a
         }
     });
 
-    $scope.play = function(url) {
-        url = "http://35.165.142.89"+url;
-        $scope.$parent.$player.loadAudio(url);
+    $scope.play = function(id) {
+        $scope.$parent.$player.loadAudio($scope.show,id);
         $('#modal1').modal('open');
     }
 
@@ -271,7 +278,17 @@ app.controller('BodyController', function($scope, $interval, $api) {
         pageClass: "",
         streamVolumeState: "enabled",
         streamState: "playing",
-        isAudioLoading: true
+        isAudioLoading: true,
+        headButton: "menu",
+        currentProgram: "",
+        show: {
+            currentList: null,
+            currentItem: null
+        }
+    };
+
+    $scope.goBack = function() {
+        history.go(-1);
     };
 
     var getCurrentProgramInterval;
@@ -281,7 +298,7 @@ app.controller('BodyController', function($scope, $interval, $api) {
         getCurrentProgramInterval = $interval(getCurrentProgram = function () {
             $api.get("/programs/current", {}, function (data) {
                 if (data.success)
-                    $scope.currentProgram = data.result.title;
+                    $scope.$vars.currentProgram = data.result;
             });
         }, 10000);
         getCurrentProgram();
@@ -336,6 +353,10 @@ app.controller('BodyController', function($scope, $interval, $api) {
             $scope.$vars.pageClass = "";
         }
 
+        if(angular.isDefined(toState.headButton)) {
+            $scope.$vars.headButton = toState.headButton;
+        }
+
         $scope.isLoading = false;
 
         if(angular.isDefined(titles[toState.name])) {
@@ -347,11 +368,15 @@ app.controller('BodyController', function($scope, $interval, $api) {
 
 
     $scope.$player = {
-        loadAudio: function(url) {
+        loadAudio: function(show,id) {
             $scope.$vars.live = false;
-            $scope.streamSrc = url;
-
+            $scope.streamSrc = "http://35.165.142.89"+show.list[id].music_link;
             $interval.cancel(getCurrentProgramInterval);
+
+            $scope.$vars.currentProgram = {
+                title: show.list[id].title,
+                image: "http://35.165.142.89"+show.image
+            };
 
         },
         loadLiveStream: function() {
@@ -367,6 +392,7 @@ app.controller('BodyController', function($scope, $interval, $api) {
                 audio.pause();
             }
         },
+
         pause: function() {
             if(!audio.paused) {
                 audio.pause();
