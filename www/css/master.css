@@ -2,6 +2,8 @@ html, body {
 	margin: 0;
 	padding: 0;
 	background-color: #F5F5F5;
+    height: 100%;
+    overflow: hidden;
 }
 
 input, a {
@@ -41,10 +43,6 @@ header {
 	text-overflow: ellipsis;
 	box-sizing: border-box;
 	padding-right: 16px;
-}
-section {
-	margin-top: 60px;
-	padding-bottom: 60px;
 }
   .pinned {
     position: fixed !important;
@@ -444,4 +442,19 @@ section .row {
 	font-weight: bold;
 	padding: 10px !important;
 	background: #FFF;
+}
+
+.about-title {
+    font-size: 26px;
+    padding-top: 16px;
+    margin: 0;
+}
+
+.main-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100% - 125px);
+    margin-top: 60px;
+    display: inline-block;
+    width: 100%;
 }

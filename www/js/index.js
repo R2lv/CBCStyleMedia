@@ -6,7 +6,8 @@ var titles = {
     categories: "Categories",
     shows: "Shows",
     settings: "Settings",
-    livevideo: "Live TV"
+    livevideo: "Live TV",
+    about: "About Us"
 };
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpParamSerializerProvider) {
 
@@ -65,6 +66,12 @@ app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpPara
         templateUrl: 'views/settings.html',
         bclass: 'settings',
         headButton: "menu"
+    })
+    .state("about", {
+        url: "/about",
+        templateUrl: "views/about.html",
+        bclass: 'about',
+        headButton: 'menu'
     });
 
     $urlRouterProvider.otherwise('/newses/0');

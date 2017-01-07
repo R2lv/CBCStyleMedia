@@ -1,12 +1,12 @@
 var app = angular.module('App', ['ngCordova','ui.router']);
 var titles = {
     main: "Ajman University Media Broadcast",
-    programs: "خلكم وينا",
-    program: "برامجنا",
-    news: "آخر الأخبار",
-    contact: "برامجنا",
+    news: "",
+    contact: "Contact Us",
     categories: "Categories",
-    shows: "Shows"
+    shows: "Shows",
+    settings: "Settings",
+    livevideo: "Live TV"
 };
 app.config(function($stateProvider, $urlRouterProvider, $httpProvider, $httpParamSerializerProvider) {
 
@@ -241,6 +241,7 @@ app.controller('NewsController', function($scope, $stateParams, $timeout, $api) 
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.news = data.result;
+            $scope.$parent.$vars.pageTitle = data.result.title;
         }
     });
 
@@ -258,6 +259,7 @@ app.controller('ShowListController', function($scope, $stateParams, $timeout, $a
         if(data.success) {
             $scope.$parent.isLoading = false;
             $scope.show = data.result.show;
+            $scope.$parent.$vars.pageTitle = data.result.show.title;
         }
     });
 
