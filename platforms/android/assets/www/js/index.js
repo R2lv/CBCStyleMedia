@@ -231,14 +231,9 @@ app.controller('programController', function($scope, $stateParams, $timeout, $ap
 
 app.controller('NewsController', function($scope, $stateParams, $timeout, $api) {
 
-    $scope.news = [
-        {
-            loading: true,
-            id: null,
-            title: "...",
-            post_intro: "..."
-        }
-    ];
+    $scope.news = {
+        loading: true
+    };
 
 
     $scope.$parent.isLoading = true;
