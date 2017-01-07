@@ -272,7 +272,14 @@ app.controller('NewsController', function($scope, $stateParams, $timeout, $api) 
 
 app.controller('ShowListController', function($scope, $stateParams, $timeout, $api) {
 
-    $scope.show = {};
+    $scope.show = {
+        list: [
+            {loading: true},
+            {loading: true},
+            {loading: true}
+        ],
+        loading: true
+    };
 
     $scope.$parent.isLoading = true;
     $api.get('/show/get', {
@@ -292,7 +299,12 @@ app.controller('ShowListController', function($scope, $stateParams, $timeout, $a
 });
 app.controller('ShowsController', function($scope, $state, $stateParams, $timeout, $api) {
 
-    $scope.shows = {};
+    $scope.shows = [
+        {loading: true},
+        {loading: true},
+        {loading: true},
+        {loading: true}
+    ];
 
     $scope.$parent.isLoading = true;
     $api.get('/show/all', {

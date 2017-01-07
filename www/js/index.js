@@ -420,7 +420,6 @@ app.controller('BodyController', function($scope, $interval, $timeout, $api) {
 
     $scope.$on('$stateChangeStart', function(){
         $scope.isLoading = true;
-        $(".main-container").scrollTop(0);
     });
 
     $scope.$on('$stateChangeSuccess', function(event, toState/*, toParams, fromState, fromParams*/){
@@ -439,6 +438,7 @@ app.controller('BodyController', function($scope, $interval, $timeout, $api) {
         if(angular.isDefined(titles[toState.name])) {
             $scope.$vars.pageTitle = titles[toState.name];
         }
+        $(".main-container").scrollTop(0);
     });
 
 
