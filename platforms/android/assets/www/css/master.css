@@ -498,3 +498,15 @@ section .row {
     display: inline-block;
     width: 100%;
 }
+
+.category.loading .title {
+	color: transparent !important;
+	background: rgba(0,0,0,0.4);
+}
+
+.category.loading .title > span {
+	display: inline-block;
+	width: 100px;
+	height: 25px;
+	background: rgba(255,255,255,0.2);
+}

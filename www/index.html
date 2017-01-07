@@ -29,7 +29,7 @@
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
         <meta charset="utf-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src * data: content:;">
+        <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src * data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
@@ -50,6 +50,7 @@
         <li><a href="#/">News</a></li>
         <li><a href="#/categories">Categories</a></li>
         <li><a href="#/shows">Shows</a></li>
+        <li><a href="javascript:void(0)" ng-click="$player.loadLiveStream(true)">Live Radio</a></li>
         <li><a href="#/livevideo">Live Video Stream</a></li>
         <li><a href="#/contact">Contact Us</a></li>
         <li><a href="#/about">About</a></li>

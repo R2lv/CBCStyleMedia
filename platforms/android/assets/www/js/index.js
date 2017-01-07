@@ -159,10 +159,30 @@ app.controller("MainController", function($scope, $stateParams, $http, $state, $
 });
 
 app.controller("CatsController", function ($scope, $api, $state) {
-    $api.get("/news/categories", {}, function(data) {
-        if(data.success) {
-            $scope.categories = data.result;
+
+    $scope.categories = [
+        {
+            loading: true
+        },
+        {
+            loading: true
+        },
+        {
+            loading: true
+        },
+        {
+            loading: true
+        },
+        {
+            loading: true
+        },
+        {
+            loading: true
         }
+    ];
+
+    $api.get("/news/categories", {}, function(data) {
+        $scope.categories = data.result;
     });
 
     $scope.open = function(id) {
@@ -381,6 +401,7 @@ app.controller('BodyController', function($scope, $interval, $timeout, $api) {
 
     $scope.$on('$stateChangeStart', function(){
         $scope.isLoading = true;
+        $(".main-container").scrollTop(0);
     });
 
     $scope.$on('$stateChangeSuccess', function(event, toState/*, toParams, fromState, fromParams*/){
