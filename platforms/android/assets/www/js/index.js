@@ -286,8 +286,7 @@ app.controller('ShowListController', function($scope, $stateParams, $timeout, $a
     });
 
     $scope.play = function(id) {
-        $scope.$parent.$player.loadAudio($scope.show,id);
-        $('#modal1').modal('open');
+        $scope.$parent.$player.loadAudio($scope.show,id, true);
     }
 
 });
@@ -322,7 +321,7 @@ app.controller('BodyController', function($scope, $interval, $timeout, $api) {
 
     $scope.$vars = {
         pageTitle: "",
-        live: true,
+        live: null,
         timeStr: "00:00:00",
         pageClass: "",
         streamVolumeState: "enabled",
@@ -368,7 +367,13 @@ app.controller('BodyController', function($scope, $interval, $timeout, $api) {
             $scope.$vars.streamState = "paused";
             $scope.$apply();
             $timeout(function() {
-                audio.load();
+                if(audio.error != null) {
+                    audio.load();
+                } else {
+                    if(!$scope.$vars.live) {
+                        $scope.$player.playNext();
+                    }
+                }
             },5000);
         });
 
@@ -377,7 +382,9 @@ app.controller('BodyController', function($scope, $interval, $timeout, $api) {
             $scope.$vars.streamState = "paused";
             $scope.$apply();
             $timeout(function() {
-                audio.load();
+                if(audio.error != null) {
+                    audio.load();
+                }
             },5000);
         });
 
@@ -426,31 +433,39 @@ app.controller('BodyController', function($scope, $interval, $timeout, $api) {
 
 
     $scope.$player = {
-        loadAudio: function(show,id) {
-
-
+        loadAudio: function(show,id,openModal) {
             if(show!=null) {
                 $scope.$vars.currentProgram = {
                     title: show.list[id].title,
                     image: show.image
                 };
+
                 $scope.$vars.show.currentList = show.list;
             } else {
                 $scope.$vars.currentProgram.title = $scope.$vars.show.currentList[id].title;
             }
 
-            $scope.$vars.live = false;
             $scope.streamSrc = "http://35.165.142.89"+$scope.$vars.show.currentList[id].music_link;
             $interval.cancel(getCurrentProgramInterval);
 
 
             $scope.$vars.show.currentItem = id;
-
+            if(openModal) {
+                $('#modal1').modal('open');
+            }
+            $scope.$vars.live = false;
         },
-        loadLiveStream: function() {
+        loadLiveStream: function(openModal) {
+
+            if($scope.$vars.live === true) return;
             $scope.$vars.live = true;
             setStreamSrc();
             runCurrentProgramInterval();
+
+
+            if(openModal) {
+                $('#modal1').modal('open');
+            }
         },
 
         playPause: function() {
@@ -542,7 +557,7 @@ app.controller('BodyController', function($scope, $interval, $timeout, $api) {
 
     $scope.saveQuality = function(quality) {
         localStorage.setItem("quality", quality);
-        setStreamSrc();
+        $scope.$player.loadLiveStream(true);
     };
 
 

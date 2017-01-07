@@ -510,3 +510,42 @@ section .row {
 	height: 25px;
 	background: rgba(255,255,255,0.2);
 }
+
+.show.loading {
+}
+
+.show.loading .card {
+    background: rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.show.loading .card-image {
+    height: 100%;
+}
+
+.show.loading .card-title {
+    color: transparent;
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    background: rgba(0,0,0,0.3);
+}
+
+.show-list.loading .show-image-wrapper {
+    height: 200px;
+    background: rgba(0,0,0,0.1);
+}
+
+.show-item.loading .item-title {
+    display: inline-block;
+    height: 15px;
+    width: 82%;
+    background: rgba(0,0,0,0.1);
+}
+
+.show-item.loading .item-info {
+    display: inline-block;
+    height: 10px;
+    width: 40%;
+    background: rgba(0,0,0,0.1);
+}

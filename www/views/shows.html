@@ -1,11 +1,11 @@
 <section class="content shows no-padding">
     <div class="row">
-        <div class="col s6 show"  ng-repeat="show in shows">
+        <div class="col s6 show" ng-class="{'loading': show.loading}"  ng-repeat="show in shows">
             <div class="card" ng-click="open(show.id)">
                 <div class="card-image">
                     <img ng-src="http://35.165.142.89{{show.image}}">
                     <span class="card-title">
-                        <a href="">{{show.title}}</a>
+                        <a href="javascript:void(0)" class="ng-cloak show-title">{{show.title}}</a>
                     </span>
                 </div>
             </div>
