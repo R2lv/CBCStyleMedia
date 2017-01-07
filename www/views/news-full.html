@@ -1,4 +1,4 @@
-<section class="news-full">
+<section class="news-full" ng-class="{'loading':news.loading}">
     <div class="row">
         <div class="col s12 no-padding">
             <div class="img-container">
@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col s12">
             <h2 class="category ng-cloak">
-                Category <a href="#/newses/{{news.category.id}}">{{news.category.name}}</a>
+                <span>Category</span> <a href="#/newses/{{news.category.id}}">{{news.category.name}}</a>
             </h2>
         </div>
     </div>
